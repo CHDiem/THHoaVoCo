@@ -28,36 +28,48 @@
   </style>
 </head>
 <body>
-  <h2>Bài kiểm tra Google Form</h2>
-  <div id="timer">Thời gian còn lại: 20:00</div>
+  <div id="timer"></div>
   <div id="form-container">
     <iframe id="formFrame"
-  src="https://docs.google.com/forms/d/e/1FAIpQLScY0ZAERMsCYnVyRQ-GL1j6j8uws6UPqwskfuXtu0Yirfh6pQ/viewform?embedded=true"
-  width="640"
-  height="1043"
-  frameborder="0"
-  marginheight="0"
-  marginwidth="0">
-  Loading…
-</iframe>
+      src="https://docs.google.com/forms/d/e/1FAIpQLScY0ZAERMsCYnVyRQ-GL1j6j8uws6UPqwskfuXtu0Yirfh6pQ/viewform?embedded=true"
+      frameborder="0" marginheight="0" marginwidth="0">
+      Đang tải…
+    </iframe>
   </div>
-
+  
   <script>
-    var duration = 20 * 60; // 20 phút tính bằng giây
-    var display = document.getElementById("timer");
+  // Số phút cho phép làm bài
+  var minutesAllowed = 15; // 👉 chỉnh số phút tại đây
+  var duration = minutesAllowed * 60; // chuyển sang giây
+  var display = document.getElementById("timer");
 
-    var timer = setInterval(function() {
-      var minutes = Math.floor(duration / 60);
-      var seconds = duration % 60;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
-      display.textContent = "Thời gian còn lại: " + minutes + ":" + seconds;
+  function updateTimer() {
+    var minutes = Math.floor(duration / 60);
+    var seconds = duration % 60;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    display.textContent = "⏱ Thời gian còn lại: " + minutes + ":" + seconds;
 
-      if (--duration < 0) {
-        clearInterval(timer);
-        document.getElementById("form-container").innerHTML =
-          "<h3>⏰ Hết thời gian làm bài!</h3>";
-      }
-    }, 1000);
-  </script>
-</body>
-</html>
+    // Nếu còn <= 3 phút thì nhấp nháy màu đỏ
+    if (duration <= 3 * 60 && duration >= 0) {
+      display.style.visibility = (display.style.visibility === "hidden" ? "visible" : "hidden");
+    } else {
+      display.style.visibility = "visible"; // bình thường
+    }
+  }
+
+  // Hiển thị ngay khi load trang
+  updateTimer();
+
+  var timer = setInterval(function() {
+    duration--;
+    updateTimer();
+
+    if (duration < 0) {
+      clearInterval(timer);
+      document.getElementById("formFrame").style.display = "none"; // Ẩn form
+      document.getElementById("form-container").innerHTML =
+        "<h3>⏰ Hết thời gian làm bài!</h3>";
+    }
+  }, 1000);
+</script>
+
