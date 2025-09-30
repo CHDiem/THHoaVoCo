@@ -63,12 +63,15 @@
       }
 
       // Hết giờ thì khóa form
-      if (--duration < 0) {
-        clearInterval(timer);
-        document.getElementById("form-container").innerHTML =
-          "<h3>⏰ Hết thời gian làm bài!</h3>";
-      }
-    }, 1000);
+      if (duration <= 0) {
+      clearInterval(timer);
+      display.textContent = "Thời gian còn lại: 0:00"; // luôn về 0:00
+      document.getElementById("form-container").innerHTML =
+        "<h3>⏰ Hết thời gian làm bài!</h3>";
+    }
+
+    duration--; // trừ sau cùng
+  }, 1000);
 
     // Cache-busting: tránh lưu giao diện cũ
     const frame = document.getElementById("formFrame");
@@ -77,3 +80,4 @@
   </script>
 </body>
 </html>
+
