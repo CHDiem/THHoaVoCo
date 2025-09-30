@@ -25,57 +25,55 @@
       height: 700px;
       border: none;
     }
+
+    /* CSS nhấp nháy */
+    .blink {
+      animation: blinkAnim 0.5s step-start infinite;
+    }
+
+    @keyframes blinkAnim {
+      50% { visibility: hidden; }
+    }
   </style>
 </head>
 <body>
-  <div id="timer"></div>
+  <div id="timer">Thời gian còn lại: 15:00</div>
   <div id="form-container">
     <iframe id="formFrame"
-      src="https://docs.google.com/forms/d/e/1FAIpQLScY0ZAERMsCYnVyRQ-GL1j6j8uws6UPqwskfuXtu0Yirfh6pQ/viewform?embedded=true"
-      frameborder="0" marginheight="0" marginwidth="0">
-      Đang tải…
+      src="https://docs.google.com/forms/d/e/1FAIpQLScY0ZAERMsCYnVyRQ-GL1j6j8uws6UPqwskfuXtu0Yirfh6pQ/viewform?embedded=true">
+      Loading…
     </iframe>
   </div>
-  
+
   <script>
-  // Số phút cho phép làm bài
-  var minutesAllowed = 15; // 👉 chỉnh số phút tại đây
-  var duration = minutesAllowed * 60; // chuyển sang giây
-  var display = document.getElementById("timer");
+    var duration = 15 * 60; // 15 phút tính bằng giây
+    var display = document.getElementById("timer");
 
-  function updateTimer() {
-    var minutes = Math.floor(duration / 60);
-    var seconds = duration % 60;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
-    display.textContent = "⏱ Thời gian còn lại: " + minutes + ":" + seconds;
+    var timer = setInterval(function() {
+      var minutes = Math.floor(duration / 60);
+      var seconds = duration % 60;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      display.textContent = "Thời gian còn lại: " + minutes + ":" + seconds;
 
-    // Nếu còn <= 3 phút thì nhấp nháy màu đỏ
-    if (duration <= 3 * 60 && duration >= 0) {
-      display.style.visibility = (display.style.visibility === "hidden" ? "visible" : "hidden");
-    } else {
-      display.style.visibility = "visible"; // bình thường
-    }
-  }
+      // Còn 3 phút thì nhấp nháy
+      if (duration <= 3 * 60 && duration >= 0) {
+        display.classList.add("blink");
+      } else {
+        display.classList.remove("blink");
+      }
 
-  // Hiển thị ngay khi load trang
-  updateTimer();
+      // Hết giờ thì khóa form
+      if (--duration < 0) {
+        clearInterval(timer);
+        document.getElementById("form-container").innerHTML =
+          "<h3>⏰ Hết thời gian làm bài!</h3>";
+      }
+    }, 1000);
 
-  var timer = setInterval(function() {
-    duration--;
-    updateTimer();
-
-    if (duration < 0) {
-      clearInterval(timer);
-      document.getElementById("formFrame").style.display = "none"; // Ẩn form
-      document.getElementById("form-container").innerHTML =
-        "<h3>⏰ Hết thời gian làm bài!</h3>";
-    }
-  }, 1000);
-
+    // Cache-busting: tránh lưu giao diện cũ
     const frame = document.getElementById("formFrame");
-const baseUrl = frame.getAttribute("src").split("?")[0];
-frame.src = baseUrl + "?embedded=true&v=" + new Date().getTime();
-</script>
+    const baseUrl = frame.getAttribute("src").split("?")[0];
+    frame.src = baseUrl + "?embedded=true&v=" + new Date().getTime();
+  </script>
 </body>
 </html>
-
