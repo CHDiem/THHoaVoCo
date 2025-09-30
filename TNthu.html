@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Bài kiểm tra</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    #timer {
+      font-size: 24px;
+      font-weight: bold;
+      color: red;
+      margin-bottom: 20px;
+    }
+    #form-container {
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+    }
+    iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>Bài kiểm tra Google Form</h2>
+  <div id="timer">Thời gian còn lại: 20:00</div>
+  <div id="form-container">
+    <iframe id="formFrame"
+  src="https://docs.google.com/forms/d/e/1FAIpQLScY0ZAERMsCYnVyRQ-GL1j6j8uws6UPqwskfuXtu0Yirfh6pQ/viewform?embedded=true"
+  width="640"
+  height="1043"
+  frameborder="0"
+  marginheight="0"
+  marginwidth="0">
+  Loading…
+</iframe>
+  </div>
+
+  <script>
+    var duration = 20 * 60; // 20 phút tính bằng giây
+    var display = document.getElementById("timer");
+
+    var timer = setInterval(function() {
+      var minutes = Math.floor(duration / 60);
+      var seconds = duration % 60;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      display.textContent = "Thời gian còn lại: " + minutes + ":" + seconds;
+
+      if (--duration < 0) {
+        clearInterval(timer);
+        document.getElementById("form-container").innerHTML =
+          "<h3>⏰ Hết thời gian làm bài!</h3>";
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
