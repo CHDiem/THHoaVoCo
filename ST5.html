@@ -71,5 +71,11 @@
         "<h3>⏰ Hết thời gian làm bài!</h3>";
     }
   }, 1000);
+
+    const frame = document.getElementById("formFrame");
+const baseUrl = frame.getAttribute("src").split("?")[0];
+frame.src = baseUrl + "?embedded=true&v=" + new Date().getTime();
 </script>
+</body>
+</html>
 
